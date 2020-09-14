@@ -51,7 +51,7 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 	glEnable(GL_DEPTH_TEST);
 
 	CGLTexture::PreparateTexturing(false);
-	m_tex1.LoadFromFile(_T("res\\lena_gray.bmp"));
+	m_tex1.DLoadFromFile(_T("res\\lena_gray.bmp"));
 
 	//GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; 
 	//GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 }; 
@@ -90,7 +90,7 @@ void CGLRenderer::DrawScene(CDC* pDC)
 
 	glEnable(GL_TEXTURE_2D);
 	m_tex1.Select();
-	DrawBox(3.0);
+	DrawBox(2.0);
 	glDisable(GL_TEXTURE_2D);
 
 	glFlush();
@@ -250,17 +250,17 @@ void CGLRenderer::DrawBox(float a)
 
 	for (int i = 0; i < 6; i++)
 	{
-		texCoords[i * 8 + 0] = 0.0;
-		texCoords[i * 8 + 1] = 0.0;
+		texCoords[i * 8 + 0] = 1.0;
+		texCoords[i * 8 + 1] = 1.0;
 
-		texCoords[i * 8 + 2] = 1.0;
-		texCoords[i * 8 + 3] = 0.0;
+		texCoords[i * 8 + 2] = 0.0;
+		texCoords[i * 8 + 3] = 1.0;
 
-		texCoords[i * 8 + 4] = 1.0;
-		texCoords[i * 8 + 5] = 1.0;
+		texCoords[i * 8 + 4] = 0.0;
+		texCoords[i * 8 + 5] = 0.0;
 
-		texCoords[i * 8 + 6] = 0.0;
-		texCoords[i * 8 + 7] = 1.0;
+		texCoords[i * 8 + 6] = 1.0;
+		texCoords[i * 8 + 7] = 0.0;
 
 		for (int j = 0; j < 4; j++)
 			// normals

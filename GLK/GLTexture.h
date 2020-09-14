@@ -7,6 +7,7 @@ public:
 	CGLTexture();
 	~CGLTexture();
 	void LoadFromFile(CString textFileName);
+	void DLoadFromFile(CString texFileName);
 	void Select();
 	void Release();
 	static void PreparateTexturing(bool bEnableLighting);
