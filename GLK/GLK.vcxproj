@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\box.jpg" />
+    <Image Include="res\earth.jpg" />
     <Image Include="res\GLK.ico" />
     <Image Include="res\GLKDoc.ico" />
     <Image Include="res\lena_gray.bmp" />

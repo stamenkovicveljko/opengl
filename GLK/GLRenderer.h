@@ -4,7 +4,7 @@
 class CGLRenderer
 {
 public:
-	CGLTexture m_tex1;
+	CGLTexture m_tex1, m_earth_tex;
 	CGLRenderer(void);
 	virtual ~CGLRenderer(void);
 		
@@ -17,6 +17,7 @@ public:
 	void DrawRoller(double h, double r, int nSegments);
 	void DrawAxes(double len);
 	void DrawBox(float a);
+	void DrawSphere(float cx, float cy, float cz, float r, int sectors, int stacks);
 
 protected:
 	HGLRC	 m_hrc; //OpenGL Rendering Context 

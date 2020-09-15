@@ -52,23 +52,27 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 
 	CGLTexture::PreparateTexturing(false);
 	m_tex1.DLoadFromFile(_T("res\\lena_gray.bmp"));
+	m_earth_tex.DLoadFromFile(_T("res\\earth.jpg"));
 
-	//GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; 
-	//GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 }; 
-	//GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 }; 
-	//GLfloat light1_position[] = { -2.0, 2.0, 1.0, 1.0 }; 
-	//GLfloat spot_direction[] = { -1.0, -1.0, 0.0 }; 
-	//glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient); 
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse); 
-	//glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular); 
+	glEnable(GL_LIGHTING);
+
+	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 }; 
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, light1_ambient);
+	GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 }; 
+	GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 }; 
+	GLfloat light1_position[] = { -2.0, 2.0, 1.0, 1.0 }; 
+	GLfloat spot_direction[] = { 1.0, 1.0, 0.0 }; 
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient); 
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse); 
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular); 
 	//glLightfv(GL_LIGHT1, GL_POSITION, light1_position); 
-	//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5); 
-	//glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5); 
-	//glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2); 
-	//glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0); 
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5); 
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5); 
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2); 
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0); 
 	//glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction); 
-	//glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0); 
-	//glEnable(GL_LIGHT1);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0); 
+	glEnable(GL_LIGHT1);
 
 	//---------------------------------
 	wglMakeCurrent(NULL, NULL);
@@ -87,11 +91,37 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	glPointSize(10);
 
 	glColor3f(0.5, 0.5, 0.5);
+	//DrawRoller(3, 1, 20);
+
 
 	glEnable(GL_TEXTURE_2D);
-	m_tex1.Select();
-	DrawBox(2.0);
+	m_earth_tex.Select();
+	DrawSphere(0, 0, 0, 3.0, 100, 100);
+	m_earth_tex.Release();
+
+	//DrawBox(50.0);
+
+	//glBegin(GL_QUADS);
+
+	//glNormal3d(0.0, 0.0, 1.0);
+	//glTexCoord2d(0.0, -1.0);
+	//glVertex3d(-2.0, 2.0, 2.0);
+
+	//glTexCoord2d(0.0, 0.0);
+	//glVertex3d(-2.0, -2.0, 2.0);
+
+	//glTexCoord2d(1.0, 0.0);
+	//glVertex3d(2.0, -2.0, 2.0);
+
+	//glTexCoord2d(1.0, -1.0);
+	//glVertex3d(2.0, 2.0, 2.0);
+
+	//DrawBox(2.0);
+	//glEnd();
 	glDisable(GL_TEXTURE_2D);
+
+	DrawAxes(10);
+	//DrawBox(2.0);
 
 	glFlush();
 	//---------------------------------
@@ -250,17 +280,17 @@ void CGLRenderer::DrawBox(float a)
 
 	for (int i = 0; i < 6; i++)
 	{
-		texCoords[i * 8 + 0] = 1.0;
-		texCoords[i * 8 + 1] = 1.0;
+		texCoords[i * 8 + 0] = 0.0;
+		texCoords[i * 8 + 1] = 0.0;
 
-		texCoords[i * 8 + 2] = 0.0;
-		texCoords[i * 8 + 3] = 1.0;
+		texCoords[i * 8 + 2] = 1.0;
+		texCoords[i * 8 + 3] = 0.0;
 
-		texCoords[i * 8 + 4] = 0.0;
-		texCoords[i * 8 + 5] = 0.0;
+		texCoords[i * 8 + 4] = 1.0;
+		texCoords[i * 8 + 5] = -1.0;
 
-		texCoords[i * 8 + 6] = 1.0;
-		texCoords[i * 8 + 7] = 0.0;
+		texCoords[i * 8 + 6] = 0.0;
+		texCoords[i * 8 + 7] = -1.0;
 
 		for (int j = 0; j < 4; j++)
 			// normals
@@ -283,4 +313,103 @@ void CGLRenderer::DrawBox(float a)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 
+}
+
+void CGLRenderer::DrawSphere(float cx, float cy, float cz, float r, int sectors, int stacks)
+{
+	glPushMatrix();
+
+	glTranslatef(cx, cy, cz);
+
+	int size = (stacks + 1) * (sectors + 1) * 3;
+	float* vert = new float[size];
+	float* norm = new float[size];
+	float* texCoords = new float[(stacks + 1) * (sectors + 1) * 2];
+	int nIndices = (sectors - 1) * stacks * 6;
+	unsigned int* indices = new unsigned int[nIndices];
+
+	float sectorStep = 2 * PI / sectors;
+	float stackStep = PI / stacks;
+	float theta, phi, s, t;
+
+	int ind = 0, texInd = 0;
+	for (int i = 0; i <= stacks; ++i) {
+		theta = PI / 2 - i * stackStep;
+
+		float y = r * sinf(theta);
+
+		for (int j = 0; j <= sectors; ++j) {
+
+			phi = j * sectorStep;
+
+			float x = r * cosf(theta) * sin(phi);
+			float z = r * cosf(theta) * cos(phi);
+
+			vert[ind + 0] = x;
+			vert[ind + 1] = y;
+			vert[ind + 2] = z;
+
+			norm[ind + 0] = x / r;
+			norm[ind + 1] = y / r;
+			norm[ind + 2] = z / r;
+
+			ind += 3;
+
+			s = (float)j / sectors;
+			t = (float)i / stacks;
+			texCoords[texInd + 0] = s;
+			texCoords[texInd + 1] = t;
+			texInd += 2;
+		}
+	}
+
+	ind = 0;
+	int k1, k2;
+	for (int i = 0; i < stacks; ++i)
+	{
+		k1 = i * (sectors + 1);     // beginning of current stack
+		k2 = k1 + sectors + 1;      // beginning of next stack
+
+		for (int j = 0; j < sectors; ++j, ++k1, ++k2)
+		{
+			// 2 triangles per sector excluding first and last stacks
+			// k1 => k2 => k1+1
+			if (i != 0)
+			{
+				indices[ind++] = k1;
+				indices[ind++] = k2;
+				indices[ind++] = k1 + 1;
+			}
+
+			// k1+1 => k2 => k2+1
+			if (i != (stacks - 1))
+			{
+				indices[ind++] = k1 + 1;
+				indices[ind++] = k2;
+				indices[ind++] = k2 + 1;
+			}
+		}
+	}
+
+
+	glVertexPointer(3, GL_FLOAT, 0, vert);
+	glNormalPointer(GL_FLOAT, 0, norm);
+	//glIndexPointer(GL_FLOAT, 0, indices);
+	glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+
+
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	//glEnableClientState(GL_INDEX_ARRAY);
+
+
+	glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, (void*)indices);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_INDEX_ARRAY);
+
+	glPopMatrix();
 }

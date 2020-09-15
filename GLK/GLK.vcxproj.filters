@@ -101,5 +101,8 @@
     <Image Include="res\lena_gray.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\earth.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
