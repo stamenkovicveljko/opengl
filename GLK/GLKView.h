@@ -15,6 +15,7 @@ protected: // create from serialization only
 // Attributes
 public:
 	CGLKDoc* GetDocument() const;
+	float cameraX = 5.0, cameraY = 5.0, cameraZ = 10.0;
 
 protected:
 	CGLRenderer m_glRenderer;
@@ -50,6 +51,7 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	virtual void OnInitialUpdate();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // debug version in GLKView.cpp

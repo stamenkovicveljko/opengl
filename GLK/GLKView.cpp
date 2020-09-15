@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CGLKView, CView)
 	ON_WM_SIZE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CGLKView construction/destruction
@@ -61,7 +62,7 @@ void CGLKView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	m_glRenderer.DrawScene(pDC);
+	m_glRenderer.DrawScene(pDC, cameraX, cameraY, cameraZ);
 }
 
 
@@ -154,4 +155,41 @@ void CGLKView::OnInitialUpdate()
 	CDC* pDC = GetDC();
 	m_glRenderer.PrepareScene(pDC);
 	ReleaseDC(pDC);
+}
+
+
+void CGLKView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+
+		float step = 1.0;
+
+		if (nChar == VK_RIGHT)
+		{
+			cameraX += step;
+		}
+		else if (nChar == VK_LEFT)
+		{
+			cameraX -= step;
+		}
+		else if (nChar == 65)		//A
+		{
+			cameraY += step;
+		}
+		else if (nChar == 68)		//D
+		{
+			cameraY -= step;
+		}
+		else if (nChar == VK_UP)
+		{
+			cameraZ -= step;
+		}
+		else if (nChar == VK_DOWN)
+		{
+			cameraZ += step;
+		}
+
+		Invalidate();
+
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
